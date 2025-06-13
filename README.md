@@ -1,5 +1,5 @@
 
-LiteApp 1.0
+LiteApp 2.0
 ===============
 
 [![Latest Stable Version](https://poser.pugx.org/unntech/liapp/v/stable)](https://packagist.org/packages/unntech/liapp)
@@ -24,7 +24,7 @@ https://liapp.unn.tech
 * 统一和精简大量用法
 
 
-> LiApp 1.0的运行环境要求PHP8.1+
+> LiApp 2.0的运行环境要求PHP8.1+
 
 ## 安装
 
@@ -54,13 +54,16 @@ yourApp/
 │   │   ├── controller                      #接口控制器目录，支持分项多级子目录
 │   │   └── ApiBase.php                     #接口基础类
 │   ├── controller                          #控制器方法目录，支持分项多级子目录
-│   ├── extend                              #继承vendor框架类，供扩展和重写方法
+│   ├── framework                           #框架核心基础文件
+│   │   ├── extend                          #继承vendor框架类，供扩展和重写方法
+│   │   ├── AppBase.php                     #app基础父类
+│   │   ├── Controller.php                  #控制器调用基础类
+│   │   ├── LiApp.php                       #LiteApp通用类，入口初始化数据
+│   │   ├── ModelBase.php                   #模型基础类
+│   │   └── Response.php                    #API 标准输出类
 │   ├── model                               #模型类
 │   ├── traits
 │   ├── ...                                 #其它子模块
-│   ├── app.php                             #app基础父类
-│   ├── Controller.php                      #控制器调用基础类
-│   ├── LiteApp.php                         #LiteApp通用类，自动载入，默认全局变量$Lite
 ├── config                                  #配置文件
 │   ├── admin.php                           #Admin后台管理模块配置
 │   ├── app.php                             #项目基础配置
@@ -82,7 +85,7 @@ yourApp/
 ├── vendor                                  #composer目录
 ├── index.php                               #主页
 ├── api.php                                 #接口API方法主入口程序
-├── authorize.php                           #接口API获取secret示例
+├── authorize.php                           #接口API获取access_token示例
 ├── autoload.php                            #autoload载入主程序
 ├── qrcode.php                              #二维码生成程序
 ├── route.php                               #控制器方法主入口路由程序
