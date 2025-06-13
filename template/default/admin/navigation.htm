@@ -1,0 +1,125 @@
+{if $Loader[navigationConfig] == 'sider'}
+<header class="main-header {if $Loader[navigatorSiderFlag]}main-header-sm{/if}">
+    <div class="navtoolbar">
+        <div class="navtoolbar-main">
+        <a class="float-left" href="javascript:navigatorSiderToggle()"><i class="bi bi-distribute-vertical"></i></a>
+        {loop $Loader[presentation] $k $v}
+        <a class="{if $k == $Loader[activeMenu]}presentation-active{else}presentation{/if} float-left" href="{$v[href]}" id="presentation-{$k}">{if $k == $Loader[activeMenu]}<i class="bi bi-record-fill text-primary"></i> {/if}{$v[title]}</a>
+            <i class="bi bi-x-circle-fill remove-presentation float-left text-secondary" onclick="removePresentation({$k});"></i>
+        {/loop}
+        </div>
+        <div class="navbar-custom-menu">
+            <a href="/"><i class="bi bi-house-door"></i> 主页</a>
+            <a href="javascript:LiadminFullScreen()"><i class="bi bi-arrows-fullscreen"></i></a>
+            <a href="javascript:userInfoMenu();"><i class="bi bi-person-circle"></i> {$Loader[curUserNickname]}</a>
+            <a href="javascript:rightSidebarBox();" title="样式设置，更多设置"><i class="bi bi-three-dots-vertical"></i></a>
+        </div>
+    </div>
+</header>
+<div style="height: 50px"></div>
+<div class="main-sidebar main-sidebar-bg-color {if $Loader[navigatorSiderFlag]}main-sidebar-sm{/if} h-100" id="admin-main-sidebar">
+    <div class="sticky-top main-sidebar-bg-color">
+        <div class="logo">
+            <a href="/admin/main.php"><img src="{DT_STATIC}/li-logo.png"></a>
+            <span class="menu-text {if $Loader[navigatorSiderFlag]}d_none{/if}">{$Loader[appName]}后台管理</span>
+        </div>
+        <div class="sidebar-top-separate"></div>
+    </div>
+    <div class="sidebar-menu-wrapper">
+    <ul class="sidebar-menu">
+        {loop $Loader[menu] $k $v}
+        <li class="{if $k == $Loader[activeMenu]}active{/if}">
+            <a href="{$v[href]}"><i class="{if empty($v['icon'])}bi bi-list-ul{else}{$v[icon]}{/if}" title="{$v[title]}"></i><span class="menu-text {if $Loader[navigatorSiderFlag]}d_none{/if}"> {$v[title]}</span></a>
+        </li>
+        {if isset($v['sub'])}
+        <ul class="sidebar-menu sidebar-menu-sub" id="sidebar-submenu-{$k}" {if !empty($v['menuShow'])} style="display:block" {/if}>
+        {loop $v['sub'] $subk $subv}
+        <li {if $subk == $Loader[activeMenu]} class="active" {/if}>
+            <a href="{$subv[href]}"><i class="{if empty($subv['icon'])}bi bi-list{else}{$subv[icon]}{/if}" title="{$subv[title]}"></i><span class="menu-text {if $Loader[navigatorSiderFlag]}d_none{/if}"> {$subv[title]}</span></a>
+        </li>
+        {/loop}
+        </ul>
+        {/if}
+        {/loop}
+    </ul>
+    </div>
+</div>
+{if $Loader[navigatorSiderFlag]}
+<style>
+    .admin-content-wrapper{padding-left: 68px;}
+    .admin-fixed-bottom{padding-left: 68px;}
+</style>
+{/if}
+{else}
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark sticky-top">
+    <div class="container-fluid">
+        <!-- Brand/logo -->
+        <a href="/admin/main.php"><img src="{DT_STATIC}/li-logo.png" class="logo-img"></a>
+        <a class="navbar-brand" href="/admin/main.php" id="navtop-appname">{$Loader[appName]}后台管理</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav navbar-nav-scroll flex-wrap">
+                {loop $Loader[menu] $k $v}
+                {if isset($v['sub'])}
+                <li  class="nav-item dropdown" >
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">{if !empty($v['icon'])}<i class="{$v[icon]}"></i> {/if}{$v[title]}</a>
+                    <div class="dropdown-menu">
+                        {loop $v['sub'] $subk $subv}
+                        <a class="dropdown-item" href="{$subv[href]}">{$subv[title]}</a>
+                        {/loop}
+                    </div>
+                </li>
+                {else}
+                <li  class="nav-item {if $k == $Loader[activeMenu]}active{/if}" >
+                    <a class="nav-link" href="{$v[href]}">{if !empty($v['icon'])}<i class="{$v[icon]}"></i> {/if}{$v[title]}</a>
+                </li>
+                {/if}
+                {/loop}
+            </ul>
+        </div>
+        <div class="navbar-custom-area d-none d-md-block">
+            <a href="/"><i class="bi bi-house-door-fill"></i> 主页</a>
+            <a href="javascript:LiadminFullScreen()"><i class="bi bi-arrows-fullscreen"></i></a>
+            <a href="javascript:userInfoMenu()"><i class="bi bi-person-circle"></i> {$Loader[curUserNickname]}</a>
+            <a href="javascript:rightSidebarBox(0);" title="样式设置，更多设置"><i class="bi bi-three-dots-vertical"></i></a>
+        </div>
+    </div>
+</nav>
+<div class="presentation-bar" id="presentation-top-bar">
+    <a class="presentation float-left" href="javascript:void(0);" id="presentation-top-bar-close"><i class="bi bi-record-circle"></i></a>
+    {loop $Loader[presentation] $k $v}
+    <a class="{if $k == $Loader[activeMenu]}presentation-active{else}presentation{/if} float-left" href="{$v[href]}">{if $k == $Loader[activeMenu]}<i class="bi bi-record-fill text-primary"></i> {/if}{$v[title]}</a>
+    {/loop}
+</div>
+<style>
+    .admin-content-wrapper{padding-left: 15px;}
+    .admin-fixed-bottom{padding-left: 15px;}
+</style>
+{/if}
+<div class="userinfomenu shadow-sm" id="userinfomenu">
+    <a class="dropdown-item" href="/admin/profile.php">个人资料</a>
+    <a class="dropdown-item" href="/admin/editpsw.php">修改密码</a>
+    <a class="dropdown-item" href="/admin/authenticator.php">动态码绑定</a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="{$Loader[LoginUri]}?action=logout">注销退出</a>
+</div>
+<div class="right-sidebar-box shadow-sm" id="admin-right-sidebar">
+    <div class="form-group right-sidebar-item">
+        <span class="form-control form-control-sm mb-2">导航菜样式</span>
+        <div id="navMenuStyleSetting">
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="navStyle-sider" name="navStyle" {if $Loader[navigationConfig] == 'sider'}checked {/if} value="sider" class="custom-control-input">
+            <label class="custom-control-label" for="navStyle-sider">侧边</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="navStyle-top" name="navStyle" {if $Loader[navigationConfig] == 'top'}checked {/if} value="top" class="custom-control-input">
+            <label class="custom-control-label" for="navStyle-top">顶部</label>
+        </div>
+        </div>
+    </div>
+    <button class="btn btn-secondary btn-block btn-sm" id="clear-cache"><i class="bi bi-tropical-storm"></i> 清除缓存</button>
+    <a href="?{$_SERVER['QUERY_STRING']}" class="btn btn-info btn-block btn-sm"><i class="bi bi-arrow-repeat"></i> 刷新页面</a>
+</div>

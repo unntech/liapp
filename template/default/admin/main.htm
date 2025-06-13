@@ -1,0 +1,28 @@
+{template 'admin/header'}
+{template 'admin/navigation'}
+<script>
+    $(document).ready(function (){
+
+    });
+</script>
+<div class="admin-content-wrapper">
+    <div class="admin-content-heading">
+        <b>控制台</b><BR>
+        用于展示当前系统中的统计数据、统计报表及重要实时数据
+        <div class="b15"></div>
+    </div>
+    <div class="admin-content-body">
+    <div class="container-fluid">
+        控制台<BR>
+        {if auth_node_auth(10)}
+        <BR>
+        数据报表，有对应权限的才显示
+        {/if}
+        <BR><BR>
+        <a href="example/index.php">一些样式例子：/admin/example/index.php</a>
+    </div>
+    </div>
+</div>
+
+
+{template 'admin/footer'}
