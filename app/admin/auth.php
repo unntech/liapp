@@ -182,7 +182,7 @@ class auth extends AppBase
             return $ret;
         }
         $liAdminToken = get_cookie('LiAdmin'.self::NonceId);
-        $verify = $this->verifyToken($liAdminToken);
+        $verify = $this->verifyToken($liAdminToken,self::NonceId);
         if ($verify === false || $userid != $verify['sub']) {
             return $ret;
         } else {
@@ -584,7 +584,7 @@ class auth extends AppBase
      * 'activeMenu'         => activeMenu,
      * 'currentAuthNode'    => currentAuthNode,
      * 'curUserNickname'    => user_nickname,
-     * 'apiToken'           => apiToken,
+     * 'access_token'       => access_token,
      * 'presentation'       => presentation,
      * 'navigatorSiderFlag' => navigatorSiderFlag,
      * 'isAjax'             => isAjax,

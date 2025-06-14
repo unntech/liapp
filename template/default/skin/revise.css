@@ -1,3 +1,11 @@
-/* 超小设备（手机，小于 768px） */
-.container{padding-left: 0; padding-right: 0;}
-@media (min-width: 992px) {}
+
+@media (min-width: 992px) {
+
+}
+@media (max-width: 768px) {
+    /* 超小设备（手机，小于 768px） */
+    .container{padding-left: 0; padding-right: 0;}
+}
+@media (max-width: 992px) {
+    .container-xlg{padding-left: 0; padding-right: 0;}
+}

@@ -13,5 +13,5 @@ use UNNTech\Encrypt\Request;
 //    $e->errorMessage();
 //}
 
-$req = Request::instance(['signType'=>'SHA256'])::headers(['access_token'=>'AsrDoSLQ1gE_H2L3AOq_lnAL2YPyufgrxyu1FA','token'=>'AsrDoSLQ1gE_H2L3AOq_lnAL2YPyufgrxyu1FA'])::generate(['abc'=>'9999']);
+$req = Request::instance(['signType'=>'SHA256'])::headers(['access_token'=>'AsrDoSLQ1gE_H2L3AOq_lnAL2YPyuf4jwCq_FA'])::generate(['abc'=>'9999']);
 var_dump($req);

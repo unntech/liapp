@@ -110,7 +110,8 @@ http://{domain}/route.php/sample/test
 方法名后面也可以加后缀 .php|.html (如：test.html)，不影响路由规则
 ~~~
 
-[完全开发手册](#)
+## 升级
+* 从LiteApp1 升级到 LiApp2参见：[upgrade.md](upgrade.md)
 
 ## 命名规范
 
