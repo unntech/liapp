@@ -2,7 +2,7 @@
 require 'autoload.php';
 
 use App\framework\Response;
-use LiPhp\LiCrypt;
+use App\api\ApiBase;
 
 /**
  * 获取 API 接口 access_token
@@ -11,33 +11,64 @@ use LiPhp\LiCrypt;
  * 简单示例，生产环境根据自己的应该需求编写自己的生成和保存规则
  */
 
-if($_SERVER['REQUEST_METHOD'] =='GET'){
-    $appid = $_GET['appid'] ?? '';
-    $secret = $_GET['secret'] ?? '';
+$msg = '授权失败';
 
-    // 验证 appid 和 secert 的合法性，做相应处理，并得到内部的 appid值 如 123
-    $sub = 123;
+if($_SERVER['REQUEST_METHOD'] =='GET'){
+    $appid = $_GET['appid'] ?? '';      // 'app313276672646586985'
+    $secret = $_GET['secret'] ?? '';    // '481b9e180527e3ce790e85b43369ce64'
+
+    // 验证 appid 和 secret 的合法性，做相应处理
+    // 本示例使用 app_secret 表里预设的 appid和secret 进行验证
+    $accessToken = (new ApiBase())->authorize_access_token($appid, $secret);
+    if(!$accessToken['suc']){
+        $msg = $accessToken['msg'];
+    }
+    $signType = 'SHA256';
 }else{
     $req = json_decode(file_get_contents("php://input"), true);
 
-    //更据请求数据 验证身份的合法性，并得到请求者ID 如 123
-    $sub = 789;
+    // 本示例流程：客户端发送 设备ID（或UUID）唯一值做为 appid,
+    // 示例用到的 RSA 密钥对 见 config/app.php
+    $signType = 'RSA';
+    if(!$req['signType'] &&  $req['signType'] != 'RSA'){ //要求必须是RSA签名
+        $accessToken['suc'] = false;
+        $msg = '请求数据必须是RSA签名';
+    }else{
+        $v = Response::instance(['private_key'=>config('app.rsaKey.private'), 'public_key'=>config('app.rsaKey.third_public')])::verifySign($req, true);
+        if($v){
+            $appid = $req['body']['uuid'] ?? '';  // 获取请求数据的设备ID（或UUID）唯一值做为 appid
+            $appid = strtolower(preg_replace('/[^a-zA-Z0-9_-]/', '', $appid));  //过滤掉非法字符
+            $accessToken = (new ApiBase())->access_token_generate($appid);
+            //签发成功，把 access_token 和 临时 secret 发给客户端
+            if(!$accessToken['suc']){
+                $msg = $accessToken['msg'];
+            }
+            Response::encrypted()::encryption('RSAIES'); //加密输出
+        }else{
+            $accessToken['suc'] = false;
+            $msg = '请求数据验签失败';
+        }
+    }
 }
 
 // 生成 access_token 示例， 根据自己的数据格式及加密算法生成
-// 以及在服务器保 Redis 保存 access_token 以备请求者验签
-$Aes = new LiCrypt(DT_KEY);
-$exp = time()+7200;
-$jwt = ['sub'=>$sub, 'exp'=>$exp];
-$access_token = $Aes->getToken($jwt);
-$data = [
-    'access_token' => $access_token,
-    'expires_in'   => $exp,
-    'issue_time'   => date('Y-m-d H:i:s'),
-];
+if($accessToken['suc']){
+    $data = [
+        'access_token' => $accessToken['access_token'],
+        'expires_in'   => $accessToken['expires_in'],
+        'issue_time'   => date('Y-m-d H:i:s'),
+    ];
+    if(isset($accessToken['secret'])){
+        $data['secret'] = $accessToken['secret'];
+    }
 
-// 输出内容根据生产需求，可做加密签验输出，更为安全
-Response::signType('SHA256')::success($data);
+    Response::signType($signType)::success($data);
+
+}else{
+
+    Response::error(401, $msg);
+
+}
 
 
 

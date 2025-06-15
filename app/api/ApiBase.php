@@ -6,6 +6,7 @@ use App\framework\AppBase;
 use App\framework\extend\Redis;
 use App\framework\LiApp;
 use App\framework\Response;
+use LiPhp\LiComm;
 use UNNTech\Encrypt\Request;
 
 class ApiBase extends AppBase
@@ -18,8 +19,6 @@ class ApiBase extends AppBase
 
     public function __construct(){
         parent::__construct();
-        $this->apiLog();
-        $this->init_request_data();
     }
 
     public function __call($name, $arguments) {
@@ -48,7 +47,11 @@ class ApiBase extends AppBase
         }
     }
 
-    protected function initialize()
+    /**
+     * 解密验签数据
+     * @return void
+     */
+    protected function initialize(): void
     {
         if($this->postData){
             $check = $this->verifySign($this->postData, false);  //如果需要安全验证，要求必须有签名才可以请求，把perforce参数改为true
@@ -62,15 +65,13 @@ class ApiBase extends AppBase
         //--------------*/
     }
 
-    protected function init_request_data()
+    protected function init_request_data(): void
     {
         $this->GET = $_GET;
         $_str = file_get_contents("php://input");
         $_arr = json_decode($_str, true);
 
         $this->postData = $_arr ?? [];
-
-        $this->initialize();
 
         //生产环境需自定义通讯密钥，或者根据请求传入的参数分配每个客户端不同的值更新此secret值
         $this->response_options = [
@@ -116,6 +117,7 @@ class ApiBase extends AppBase
      */
     final public function run(string $path = '')
     {
+        $this->apiLog();
         $requestPath = isset($_SERVER['PATH_INFO']) ? explode('/',$_SERVER['PATH_INFO']) : [];
         $pathInfoCount = count($requestPath);
         if($pathInfoCount >= 3){
@@ -138,7 +140,8 @@ class ApiBase extends AppBase
                 if(file_exists($filename)){
 
                     $api = new $newClass();
-
+                    $api->init_request_data();
+                    $api->initialize();
                     $api->$func();
 
                     return $api;
@@ -187,31 +190,54 @@ class ApiBase extends AppBase
 
     }
 
-    public function authorize_token($appid, $secret): array
+    public function authorize_access_token(?string $appid, ?string $secret): array
     {
         if(empty($appid)){
-            return ['suc'=>false];
+            return ['suc'=>false, 'msg'=>'Appid 不能为空'];
         }
         $r = $this->db->table('app_secret')->where(['appid'=>$appid])->selectOne();
         if($r){
             if($r['status'] < 1 || ($r['status'] == 2 && $r['expires'] < $this->DT_TIME) || $r['appsecret'] != $secret){
-                return ['suc'=>false];
+                return ['suc'=>false, 'msg'=>'Appid 状态不正常或secret不正确'];
             }else{
                 $exp = $this->DT_TIME + 7200;
                 $jwt = ['sub'=>$appid, 'exp'=>$exp];
                 $token = $this->getToken($jwt);
                 LiApp::set_redis();
                 $_str = serialize(['token'=>$token, 'secret'=>$secret]);
-                Redis::set($appid, $_str, 7200);
+                Redis::set("ACCESS_".$appid, $_str, 7200);
                 return [
-                    'suc'     => true,
-                    'token'   => $token,
-                    'expires' => $exp,
+                    'suc'          => true,
+                    'access_token' => $token,
+                    'expires_in'   => $exp,
                 ];
             }
         }else{
-            return ['suc'=>false];
+            return ['suc'=>false, 'msg'=>'Appid 不存在'];
         }
+    }
+
+    public function access_token_generate(?string $appid): array
+    {
+        if(empty($appid)){
+            return ['suc'=>false, 'msg'=>'Appid 不能为空'];
+        }
+        if(strlen($appid) < 32){
+            return ['suc'=>false, 'msg'=>'请求设备UUID长度不能小于32位'];
+        }
+        $exp = $this->DT_TIME + 7200;
+        $jwt = ['sub'=>$appid, 'exp'=>$exp];
+        $token = $this->getToken($jwt);
+        $secret = LiComm::createNonceStr(32);
+        LiApp::set_redis();
+        $_str = serialize(['token'=>$token, 'secret'=>$secret]);
+        Redis::set("ACCESS_".$appid, $_str, 7200);
+        return [
+            'suc'          => true,
+            'access_token' => $token,
+            'expires_in'   => $exp,
+            'secret'       => $secret,
+        ];
     }
 
 }
