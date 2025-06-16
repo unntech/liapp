@@ -30,7 +30,7 @@ if($_SERVER['REQUEST_METHOD'] =='GET'){
     // 本示例流程：客户端发送 设备ID（或UUID）唯一值做为 appid,
     // 示例用到的 RSA 密钥对 见 config/app.php
     $signType = 'RSA';
-    if(!$req['signType'] &&  $req['signType'] != 'RSA'){ //要求必须是RSA签名
+    if(!isset($req['signType']) || $req['signType'] != 'RSA'){ //要求必须是RSA签名
         $accessToken['suc'] = false;
         $msg = '请求数据必须是RSA签名';
     }else{

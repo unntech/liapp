@@ -48,7 +48,7 @@ composer update unntech/liphp
 ~~~
 yourApp/
 ├── admin                                   #Admin后台管理模块基本程序
-├── app                                     #LiteApp命名空间
+├── app                                     #App命名空间
 │   ├── admin                               #Admin模块基础类
 │   ├── api                                 #Api接口
 │   │   ├── controller                      #接口控制器目录，支持分项多级子目录

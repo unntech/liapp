@@ -3,6 +3,7 @@ CHANGELOG
 
 ### v2.0.2 `2025-06-14`
 * 修复 `App\admin\auth` `hasLogin` 的BUG
+* 完善 authorize 获取 access_token 示例，以及 ApiAuthorize 对 access_token 的验证示例
 
 ### v2.0.1 `2025-06-08`
 * 从`unntech/liteapp`引用版本, 优化PHP8强类型（严格模式），更多使用PHP8的新特性

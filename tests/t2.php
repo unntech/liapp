@@ -4,6 +4,7 @@ require '../autoload.php';
 use App\framework\LiApp;
 use App\framework\extend\DB;
 use UNNTech\Encrypt\Request;
+use App\framework\Response;
 use LiPhp\LiComm;
 
 //use LitePhp\Exception;
@@ -14,6 +15,9 @@ use LiPhp\LiComm;
 //    $e->errorMessage();
 //}
 
-$req = Request::instance(['signType'=>'SHA256', 'secret'=>'ykahN5U6JlwdxQHbZoUrMQxp1LHJhkMT'])::headers(['access_token'=>'AsrDoSLQ1hRkEnvjVPb5gk7hu5vBPreW3CHumbUcQw6e6A2-bXpjjOSGC4pumJlKKaw9XfDkqZo6iLbk2hzR'])::generate(['abc'=>'9999']);
-//$req = Request::instance(['signType'=>'RSA', 'private_key'=>config('app.rsaKey.private'), 'public_key'=>config('app.rsaKey.third_public')])::generate(['uuid'=>LiComm::uuid()]);
-var_dump($req);
+Response::error(500,'Request Throwable!');
+
+//$req = Request::headers(['uri'=>'/authorize'])::generate(['appid'=>'app313276672646586985', 'secret'=>'481b9e180527e3ce790e85b43369ce64']);
+$req = Request::instance(['signType'=>'SHA256', 'secret'=>'cLL6lmyovFibjPIF40kWpiqoPozjGK9M'])::headers(['access_token'=>'AsrDoSLQ1hRhFyuwVKP31RkaqVx0G0g4gZxLUHImwKpcOKHIE0isxmIuo2i3FOKMYJILPJyijHIEkPk9za28','uri'=>'/sampleAuthorize/test'])::generate(['abc'=>'9999']);
+//$req = Request::instance(['signType'=>'RSA', 'private_key'=>config('app.rsaKey.private'), 'public_key'=>config('app.rsaKey.third_public')])::headers(['uri'=>'/authorize'])::generate(['uuid'=>LiComm::uuid()]);
+dv($req);

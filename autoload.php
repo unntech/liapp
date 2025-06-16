@@ -13,8 +13,8 @@ $DT_TIME = LiApp::$DT_TIME;
 $DT_IP = LiApp::$DT_IP;
 $title = LiApp::$appName;
 
-require_once DT_ROOT . '/vendor/unntech/liphp/src/helper.php';
 require_once DT_ROOT . '/include/common.php';
+require_once DT_ROOT . '/vendor/unntech/liphp/src/helper.php';
 set_exception_handler('exception_handler');
 LiApp::set_db();
 LiPhp\Model::setDb(LiApp::$db);
