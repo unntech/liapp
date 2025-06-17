@@ -253,7 +253,7 @@ class auth extends AppBase
         if ($user['status'] != 0) {
             return (object)['errcode' => 2, 'msg' => '账号已被禁用或已删除'];
         }
-        if ($this->password($passwd) != $user['psw']) {
+        if (!$this->password_verify($passwd, $user['psw'])) {
             return (object)['errcode' => 3, 'msg' => '密码输入有误'];
         }
         if (!empty($user['authenticator'])) {
@@ -395,13 +395,26 @@ class auth extends AppBase
 
     /**
      * 生成密码哈希
-     * @param string $value
-     * @param string $salt
+     * @param string $password
      * @return string
      */
-    public function password(string $value, string $salt = ''): string
+    public function password(string $password): string
     {
-        return sha1($value . $salt);
+        //$hash = password_hash($value, PASSWORD_BCRYPT); // 生成哈希
+        //$hash = sha1($password);
+        return hash("sha256", $password);
+    }
+
+    public function password_verify(string $password, string $hash): bool
+    {
+        //$v = password_verify($password, $hash);
+        $hl = strlen($hash);
+        if($hl < 60){
+            $_hash = sha1($password);
+        }else{
+            $_hash = hash("sha256", $password);
+        }
+        return $_hash == $hash;
     }
 
     /**

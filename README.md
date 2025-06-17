@@ -115,7 +115,7 @@ http://{domain}/route.php/sample/test
 
 ## 命名规范
 
-`LiApp`遵循PSR-2命名规范和PSR-4自动加载规范。
+`LiApp`遵循PSR命名规范和PSR-4自动加载规范。
 
 ## 参与开发
 

@@ -14,7 +14,7 @@ if(isset($_POST['save'])){
         exit(0);
     }
     $user = auth::instance()->getAdminUser(auth::$curUserId);
-    if(auth::instance()->password($_POST['oldpassword']) != $user['psw']){
+    if(!auth::instance()->password_verify($_POST['oldpassword'], $user['psw'])){
         $promptMessage = '您输入的旧密码不正确！';
         include Template::load('admin/message');
         exit(0);

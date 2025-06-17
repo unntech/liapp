@@ -4,6 +4,7 @@ require '../autoload.php';
 use App\framework\LiApp;
 use LiPhp\Template;
 use App\admin\auth;
+use LiPhp\LiComm;
 use App\framework\Response;
 
 $Loader = auth::instance()->Loader(6);
@@ -40,7 +41,7 @@ if($Loader['isAjax']){  //ajax 提交
         $data = ['nickname' => $postData['nickname'], 'status' => $postData['userstatus'], 'admin' => $postData['useradmin']];
         $data['username'] = strtoupper(LiApp::$db->removeEscape($postData['username']));
         if (empty($postData['password'])) {
-            $postData['password'] = '123456';
+            $postData['password'] = LiComm::createNonceStr(6);
         }
         $data['psw'] = auth::instance()->password($postData['password']);
         $data['auth_ids'] = implode(',', json_decode($postData['rules'], true));

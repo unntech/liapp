@@ -6,6 +6,7 @@ use UNNTech\Encrypt\Request;
 $data = [
     'order_id' => 123,
     'money'    => 1001.23,
+    'text'     => '中文',
 ];
 
 $req = Request::instance(['secret'=>DT_KEY, 'signType'=>'SHA256'])::headers(['app'=>'IOS', 'token'=>'hjdp6DnmCZWgQCSzQ43d1Eo7YhES2VZ5I86OOY/L1nY7kqn7gSGdO4SLMg9HIUppdGEEdVz7HyFB1F3eb600A98DqoqcJQrIEis1DmKLLbKQJCtXbi'])::generate($data, 'array');

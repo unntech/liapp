@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+### v2.0.3 `2025-06-17`
+* 保存的用户登入密码哈希值由sha1改为SHA256，提高密码保存安全性
+
 ### v2.0.2 `2025-06-14`
 * 修复 `App\admin\auth` `hasLogin` 的BUG
 * 完善 authorize 获取 access_token 示例，以及 ApiAuthorize 对 access_token 的验证示例
