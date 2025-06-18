@@ -13,8 +13,7 @@ class Controller extends AppBase
     public function __construct()
     {
         parent::__construct();
-        $this->init_request_data();
-        $this->title = config('app.name');
+
     }
 
     public function __call($name, $arguments) {
@@ -24,12 +23,25 @@ class Controller extends AppBase
         $this->exception("调用方法：{$name} 不存在！", 405);
     }
 
-    protected function init_request_data()
+    /**
+     * 解密验签数据
+     * 继承类可重写此方法，鉴权及处理初始数据等
+     */
+    protected function initialize(): void
+    {
+
+        /* ---------------
+        其它鉴权等
+        //--------------*/
+    }
+
+    protected function init_request_data(): void
     {
         $this->GET = $_GET;
         $this->POST = $_POST;
         $postStr = file_get_contents("php://input");
         $this->postData = empty($postStr) ? [] : json_decode($postStr, true);
+        $this->title = config('app.name');
     }
 
     /**
@@ -64,8 +76,10 @@ class Controller extends AppBase
                 if(file_exists($filename)){
 
                     $http = new $newClass();
+                    $http->init_request_data();
                     $http->setCurFuncName($func);
                     $http->setClassName($_className);
+                    $http->initialize();
                     $http->$func();
 
                     return $http;

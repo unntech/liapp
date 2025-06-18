@@ -5,7 +5,6 @@ use App\framework\LiApp;
 use App\framework\extend\DB;
 use UNNTech\Encrypt\Request;
 use App\framework\Response;
-use LiPhp\LiComm;
 
 
 //use LitePhp\Exception;

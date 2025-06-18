@@ -3,8 +3,9 @@
 namespace App\framework\extend;
 
 /**
- * @method static \LiPhp\mysqli table(string $table, ?string $alias= null)
+ * @method static \LiPhp\Mysqli table(string $table, ?string $alias= null)
  */
+
 class Db extends \LiPhp\Db
 {
     /**

@@ -9,6 +9,7 @@ use LiPhp\Env;
 use LiPhp\Template;
 use App\framework\extend\Db;
 use App\framework\extend\Redis;
+use App\framework\extend\Logger;
 
 class LiApp
 {
@@ -21,6 +22,7 @@ class LiApp
      * @var \Redis
      */
     public static $redis;
+    public static Logger $logger;
     public static int $DT_TIME;
     public static string $DT_IP;
     public static string $appName;
@@ -37,17 +39,20 @@ class LiApp
         self::$domain =Config::get('app.domain', '');
         define('ENVIRONMENT', Config::get('app.ENVIRONMENT', 'DEV'));
         define('DT_DEBUG', Config::get('app.APP_DEBUG', true));
+        self::$logger = Logger::instance();
         if (DT_DEBUG) {
             error_reporting(E_ALL);
+            self::$logger->setLogLevel(Logger::LEVEL_DEBUG);
         } else {
             error_reporting(E_ERROR);
+            self::$logger->setLogLevel(Logger::LEVEL_ERROR);
         }
         define('APP_VERSION', Config::get('app.version', self::VERSION));
         define('DT_KEY', Config::get('app.authkey', 'LitePhp'));
         define('DT_SKIN', '/template/' . Config::get('app.template', 'default') . "/skin");
         define("DT_STATIC", '/template/static');
-        Template::init(DT_ROOT, Config::get('app.template', 'default'), DT_ROOT . "/runtime/cache");
-
+        Template::init(DT_ROOT.'/template', Config::get('app.template', 'default'), DT_ROOT . "/runtime/cache");
+        self::$logger->addOutputTargetFile('app.log');
     }
 
     /**

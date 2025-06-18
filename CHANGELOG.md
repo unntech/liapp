@@ -3,6 +3,8 @@ CHANGELOG
 
 ### v2.0.3 `2025-06-17`
 * 保存的用户登入密码哈希值由sha1改为SHA256，提高密码保存安全性
+* 启动自动载入 Logger 日志记录标准类
+* Template init() 第一个参数改传模版文件根路径
 
 ### v2.0.2 `2025-06-14`
 * 修复 `App\admin\auth` `hasLogin` 的BUG

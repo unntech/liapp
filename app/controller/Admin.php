@@ -27,6 +27,11 @@ class Admin extends Controller
 
     public function __construct(){
         parent::__construct();
+
+    }
+
+    protected function initialize(): void
+    {
         $this->auth();
         $this->pageNum = config('admin.pageNum');
         $_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -35,6 +40,7 @@ class Admin extends Controller
         }
         $this->page = $_page;
         $this->pageStart = ($_page - 1) * $this->pageNum;
+        parent::initialize();
     }
 
     public function view(string $template = '', array $vars = [], array $CSS = [])

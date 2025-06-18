@@ -62,6 +62,7 @@ yourApp/
 │   │   ├── ModelBase.php                   #模型基础类
 │   │   └── Response.php                    #API 标准输出类
 │   ├── model                               #模型类
+│   ├── structure                           #自定义的数据结构体
 │   ├── traits
 │   ├── ...                                 #其它子模块
 ├── config                                  #配置文件
