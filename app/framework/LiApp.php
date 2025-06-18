@@ -52,7 +52,7 @@ class LiApp
         define('DT_SKIN', '/template/' . Config::get('app.template', 'default') . "/skin");
         define("DT_STATIC", '/template/static');
         Template::init(DT_ROOT.'/template', Config::get('app.template', 'default'), DT_ROOT . "/runtime/cache");
-        self::$logger->addOutputTargetFile('app.log');
+        self::$logger->addOutputTargetFile('app-'.date("Y-m").'.log');
     }
 
     /**
