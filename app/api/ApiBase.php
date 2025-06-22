@@ -82,6 +82,7 @@ class ApiBase extends AppBase
             'headers'     => [],
             'encrypted'   => $this->postData['encrypted'] ?? false,
             'encryption'  => 'RSA',
+            'json_encode_flags'=>JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
         ];
     }
 

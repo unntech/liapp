@@ -13,7 +13,7 @@ use App\framework\extend\Logger;
 
 class LiApp
 {
-    const VERSION = '2.0.3';
+    const VERSION = '2.0.4';
     /**
      * @var extend\MySQLi
      */
@@ -68,7 +68,7 @@ class LiApp
     /**
      * 连接一个新的数据库
      * @param int $i 为配置文件db列表里的第几个配置
-     * @return false|extend\MySQLi|extend\SqlSrv|extend\MongoDB
+     * @return false|extend\MySQLi|extend\SqlSrv|extend\MongoDB|extend\PgSql
      */
     public static function new_db(int $i = 0)
     {
