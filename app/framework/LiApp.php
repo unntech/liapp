@@ -13,7 +13,7 @@ use App\framework\extend\Logger;
 
 class LiApp
 {
-    const VERSION = '2.0.4';
+    const VERSION = '2.0.5';
     /**
      * @var extend\MySQLi
      */

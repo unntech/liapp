@@ -24,7 +24,7 @@ https://liapp.unn.tech
 * 统一和精简大量用法
 
 
-> LiApp 2.0的运行环境要求PHP8.1+
+> LiApp 2.0 的运行环境要求PHP8.1+
 
 ## 安装
 
@@ -88,6 +88,7 @@ yourApp/
 ├── api.php                                 #接口API方法主入口程序
 ├── authorize.php                           #接口API获取access_token示例
 ├── autoload.php                            #autoload载入主程序
+├── CHANGELOG.md                            #版本更新日志
 ├── qrcode.php                              #二维码生成程序
 ├── route.php                               #控制器方法主入口路由程序
 ├── composer.json                           #
@@ -120,7 +121,8 @@ http://{domain}/route.php/sample/test
 
 ## 参与开发
 
-直接提交PR或者Issue即可
+直接提交PR或者Issue即可  
+> [版本更新记录 CHANGELOG](CHANGELOG.md)
 
 ## 版权信息
 

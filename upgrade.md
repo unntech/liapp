@@ -19,7 +19,7 @@
 * `$auth->authNode` 替换：`auth_node_auth`
 * `auth_nodeHref` 替换：`auth_node_href`
 * 因后端API输出格式统一，所以ajax接收到的内容直接是JSON，无需再JSON.parse
-* 数据集结构也发现改变为：https://github.com/unntech/encrypt/blob/main/src/encrypt.md
+* 数据集结构也统一改变为：https://github.com/unntech/encrypt/blob/main/src/encrypt.md
 * `errcode`, `msg`信息放到`head`里，`data`放至`body`里
 * 修改所有`adminComm.post`请求结果处理
 

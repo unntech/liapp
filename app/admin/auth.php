@@ -508,7 +508,7 @@ class auth extends AppBase
     public function presentation(int $activeMenu): array
     {
         $maxPresentation =config('admin.presentation', 10);
-        $presentation = json_decode(get_cookie('presentation'.$this->user['id']), true);
+        $presentation = json_decode(base64_decode(get_cookie('presentation'.$this->user['id'])), true);
         if(empty($presentation)){
             $presentation = [];
         }
@@ -527,7 +527,7 @@ class auth extends AppBase
             $k = array_key_first($_hit);
             unset($presentation[$k]);
         }
-        set_cookie('presentation'.$this->user['id'], json_encode($presentation));
+        set_cookie('presentation'.$this->user['id'], base64_encode(json_encode($presentation, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)));
         return $presentation;
     }
 

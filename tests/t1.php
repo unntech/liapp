@@ -8,7 +8,7 @@ $config = config('app');
 $where[] = ['addtime'=>1];
 $where[] = ['addtime'=>['>=', 2]];
 $where[] = ['addtime'=>['in',[123,456]]];
-$where[] = ['addtime'=>['BETWEEN','123 AND 456']];
+$where[] = ['addtime'=>['BETWEEN', 123, 456]];
 $where[] = "(id = 1 or id = 3)";
 echo LiApp::$db->table('admin_log')->alias('a')->where(['addtime'=>4])->where($where)->where("(id = 1 or id = 3)")->fields(['id','admin_id','addtime'])->fetchSql()->select();
 var_dump(LiApp::$db->getOptions(), DT_ROOT);
