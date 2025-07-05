@@ -27,7 +27,7 @@ if(isset($_POST['savebtn'])){
         $rules_ids = implode(',', $rulesCheck);
     }
     $res = LiApp::$db->table('admin')->where(['id'=>$id])->fields(['auth_priv'=>$rules_ids])->update();
-    auth::instance()->aLog('用户私有权限分配：'.$id, json_encode($rulesCheck));
+    auth::instance()->aLog('用户私有权限分配：'.$id, $rulesCheck);
     $user = auth::instance()->getAdminUser($id);
 }
 

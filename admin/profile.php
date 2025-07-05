@@ -45,7 +45,7 @@ if (isset($_POST['save'])) {
     $res = LiApp::$db->table('admin')->where(['id' => auth::$curUserId])->fields(['nickname' => $_POST['nickname']])->update();
     if ($res) {
         $postSuccess = true;
-        auth::instance()->aLog('修改个人资料', json_encode($_POST));
+        auth::instance()->aLog('修改个人资料', $_POST);
     }
 }
 $profile = auth::instance()->getAdminUser(auth::$curUserId);

@@ -21,7 +21,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1000, '查无记录！');
         }
     }elseif($postData['node'] == 11 && $postData['action'] == 'EDIT') {
-        auth::instance()->aLog('编辑用户：'.$postData['rowid'], json_encode($postData));
+        auth::instance()->aLog('编辑用户：'.$postData['rowid'], $postData);
         if($postData['useradmin'] == 1){$postData['useradmin'] = 0;}
         $data = ['nickname' => $postData['nickname'], 'status' => $postData['userstatus'], 'admin' => $postData['useradmin']];
         $data['username'] = strtoupper(LiApp::$db->removeEscape($postData['username']));
@@ -36,7 +36,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1001, '更新用户资料失败！');
         }
     }elseif($postData['node'] == 10 && $postData['action'] == 'ADD'){
-        auth::instance()->aLog('添加用户', json_encode($postData));
+        auth::instance()->aLog('添加用户', $postData);
         if($postData['useradmin'] == 1){$postData['useradmin'] = 0;}
         $data = ['nickname' => $postData['nickname'], 'status' => $postData['userstatus'], 'admin' => $postData['useradmin']];
         $data['username'] = strtoupper(LiApp::$db->removeEscape($postData['username']));
@@ -52,7 +52,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1001, '添加用户失败！');
         }
     }elseif($postData['node'] == 10 && $postData['action'] == 'DELETE'){
-        auth::instance()->aLog('删除用户：'.$postData['rowid'], json_encode($postData));
+        auth::instance()->aLog('删除用户：'.$postData['rowid'], $postData);
         if($postData['rowid'] == 1){
             Response::error(1001, 'ID为1的超级管理员用户不可删除！');
         }
@@ -63,7 +63,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1001, '删除用户失败！');
         }
     }elseif($postData['node'] == 18 && $postData['action'] == 'SECURE'){
-        auth::instance()->aLog('解绑动态码：'.$postData['rowid'], json_encode($postData));
+        auth::instance()->aLog('解绑动态码：'.$postData['rowid'], $postData);
         $res = LiApp::$db->table('admin')->where(['id'=>$postData['rowid']])->fields(['authenticator'=>''])->update();
         if($res){
             Response::success(['id' => $postData['rowid']]);

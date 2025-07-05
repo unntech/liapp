@@ -27,7 +27,7 @@ if(isset($_POST['savebtn'])){
         $rules_ids = implode(',', $rulesCheck);
     }
     $res = LiApp::$db->table('admin_auth')->where(['id'=>$id])->fields(['rules'=>$rules_ids])->update();
-    auth::instance()->aLog('角色分配权限：'.$id, json_encode($rulesCheck));
+    auth::instance()->aLog('角色分配权限：'.$id, $rulesCheck);
     $ruleName = auth::instance()->getAdminAuth($id);
 }
 

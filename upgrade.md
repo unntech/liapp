@@ -22,6 +22,7 @@
 * 数据集结构也统一改变为：https://github.com/unntech/encrypt/blob/main/src/encrypt.md
 * `errcode`, `msg`信息放到`head`里，`data`放至`body`里
 * 修改所有`adminComm.post`请求结果处理
+* Template 模板load时无参数则为PHP脚本相同路径的htm模版文件
 
 ### 程序语法的调整
 * 数据连接语句 `$Lite->db` 替换： `LiApp::$db`   (需先 use App\framework\LiApp)

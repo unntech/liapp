@@ -22,7 +22,7 @@ if(isset($_POST['save'])){
     $newpsw = auth::instance()->password($_POST['newpassword']);
     $res = LiApp::$db->table('admin')->where(['id'=>auth::$curUserId])->fields(['psw'=>$newpsw])->update();
     if($res){
-        auth::instance()->aLog('修改个人密码', json_encode($_POST));
+        auth::instance()->aLog('修改个人密码', $_POST);
         $promptMessage = '修改密码成功！';
         include Template::load('admin/message');
         exit(0);

@@ -18,7 +18,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1000, '查无记录！');
         }
     }elseif($postData['node'] == 13 && $postData['action'] == 'EDIT') {
-        auth::instance()->aLog('编辑角色：'.$postData['rowid'], json_encode($postData));
+        auth::instance()->aLog('编辑角色：'.$postData['rowid'], $postData);
         $data = ['title'=>$postData['username'], 'remark' => $postData['nickname'], 'status' => $postData['userstatus']];
         $res = LiApp::$db->table('admin_auth')->where(['id' => $postData['rowid']])->fields($data)->update();
         if ($res) {
@@ -27,7 +27,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1001, '更新角色资料失败！');
         }
     }elseif($postData['node'] == 12 && $postData['action'] == 'ADD'){
-        auth::instance()->aLog('添加角色', json_encode($postData));
+        auth::instance()->aLog('添加角色', $postData);
         $data = ['title'=>$postData['username'], 'remark' => $postData['nickname'], 'status' => $postData['userstatus']];
         $res = LiApp::$db->table('admin_auth')->insert($data);
         if ($res) {
@@ -36,7 +36,7 @@ if($Loader['isAjax']){  //ajax 提交
             Response::error(1001, '添加用户失败！');
         }
     }elseif($postData['node'] == 14 && $postData['action'] == 'DELETE'){
-        auth::instance()->aLog('删除角色：'.$postData['rowid'], json_encode($postData));
+        auth::instance()->aLog('删除角色：'.$postData['rowid'], $postData);
         $res = LiApp::$db->table('admin_auth')->where(['id'=>$postData['rowid']])->fields(['status'=>-1])->update();
         if($res){
             Response::success(['id' => $postData['rowid']]);

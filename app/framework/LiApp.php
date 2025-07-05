@@ -6,6 +6,7 @@ namespace App\framework;
 use LiPhp\LiComm;
 use LiPhp\Config;
 use LiPhp\Env;
+use LiPhp\Model;
 use LiPhp\Template;
 use App\framework\extend\Db;
 use App\framework\extend\Redis;
@@ -13,7 +14,7 @@ use App\framework\extend\Logger;
 
 class LiApp
 {
-    const VERSION = '2.0.5';
+    const VERSION = '2.0.6';
     /**
      * @var extend\MySQLi
      */
@@ -28,13 +29,25 @@ class LiApp
     public static string $appName;
     public static string $domain;
 
+    /**
+     * 启动截入项
+     * @return void
+     */
+    public static function Loader(): void
+    {
+        Config::load(['db']);
+        self::$logger->addOutputTargetFile('app-'.date("Y-m").'.log');
+        LiApp::set_db();
+        Model::setDb(self::$db);
+    }
+
     public static function initialize(): void
     {
         self::$DT_TIME = time();
         self::$DT_IP = LiComm::ip();
         Env::load(DT_ROOT.'/.env');
         Config::initialize(DT_ROOT . "/config/");
-        Config::load(['app', 'db']);
+        Config::load(['app']);
         self::$appName =Config::get('app.name', 'LiteApp');
         self::$domain =Config::get('app.domain', '');
         define('ENVIRONMENT', Config::get('app.ENVIRONMENT', 'DEV'));
@@ -52,7 +65,6 @@ class LiApp
         define('DT_SKIN', '/template/' . Config::get('app.template', 'default') . "/skin");
         define("DT_STATIC", '/template/static');
         Template::init(DT_ROOT.'/template', Config::get('app.template', 'default'), DT_ROOT . "/runtime/cache");
-        self::$logger->addOutputTargetFile('app-'.date("Y-m").'.log');
     }
 
     /**

@@ -1,5 +1,5 @@
-{template 'header','admin'}
-{template 'navigation','admin'}
+{template 'admin/header'}
+{template 'admin/navigation'}
 <script>
     listTreeArr = {json_encode($listTreeArr)};
     $(document).ready(function(){
@@ -65,4 +65,4 @@
         </div>
     </div>
 </div>
-{template 'footer','admin'}
+{template 'admin/footer'}

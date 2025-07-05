@@ -37,7 +37,7 @@ class ApiBase extends AppBase
             $log = [
                 'url'      => $_SERVER['PHP_SELF'],
                 'params'   => json_encode($_GET, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
-                'postData' => file_get_contents("php://input"),
+                'postdata' => file_get_contents("php://input"),
                 'ip'       => $this->DT_IP,
                 'addtime'  => $this->DT_TIME,
             ];

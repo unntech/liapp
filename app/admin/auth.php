@@ -281,8 +281,7 @@ class auth extends AppBase
 
         //登入成功，写入登入日志
         $this->db->table('admin')->where(['id' => $user['id']])->update(['login_num' => ['INC',1]]);
-        $content = json_encode(['username' => $username, 'authenticator' => $authenticator]);
-        $this->aLog('登入成功', $content);
+        $this->aLog('登入成功', ['username' => $username, 'authenticator' => $authenticator]);
 
         $this->updateMenuNode(true);
 
@@ -323,14 +322,19 @@ class auth extends AppBase
             }
         }
 
-        $_aIds = $this->db->table('admin_auth')->where("id IN ({$user['auth_ids']})")->fields("GROUP_CONCAT(rules)")->getValue();
+        //$_aIds = $this->db->table('admin_auth')->where("id IN ({$user['auth_ids']})")->fields("GROUP_CONCAT(rules)")->getValue();
+        $res = $this->db->table('admin_auth')->where("id IN ({$user['auth_ids']})")->fields("rules")->select();
+        $_aIds = '';
+        while ($r = $res->fetch_assoc()){
+            $_aIds .= $r['rules'];
+        }
         $authIds = empty($_aIds) ? [] : explode(',', $_aIds);
         $authIds = array_merge($authIds, $this->user['authPrivs']);
         //获取菜单权限
         if ($user['admin'] == 1) {
-            $res = $this->db->table( 'admin_node')->where(['is_menu' => 1, 'status' => 1])->order('pid, sort desc')->select();
+            $res = $this->db->table( 'admin_node')->where(['is_menu' => 1, 'status' => 1])->order('pid, sort desc, id')->select();
         } else {
-            $res = $this->db->table('admin_node')->where(['is_menu' => 1, 'status' => 1, 'id' => ['IN', $authIds]])->order('pid, sort desc')->select();
+            $res = $this->db->table('admin_node')->where(['is_menu' => 1, 'status' => 1, 'id' => ['IN', $authIds]])->order('pid, sort desc, id')->select();
         }
         $node = [];
         while ($r = $res->fetch_assoc()) {
@@ -359,9 +363,9 @@ class auth extends AppBase
 
         //获取权限节点
         if ($user['admin'] == 1) {
-            $res = $this->db->table('admin_node')->where(['status' => 1])->order('sort')->select();
+            $res = $this->db->table('admin_node')->where(['status' => 1])->order('sort desc, id')->select();
         } else {
-            $res = $this->db->table('admin_node')->where(['status' => 1, 'id' => ['IN', $authIds]])->order('sort')->select();
+            $res = $this->db->table('admin_node')->where(['status' => 1, 'id' => ['IN', $authIds]])->order('sort desc, id')->select();
         }
         $node = [];
         $nodePathId = [];
@@ -420,10 +424,10 @@ class auth extends AppBase
     /**
      * 写入管理员操作日志
      * @param string $title
-     * @param string $content
+     * @param ?array $content
      * @return false|int|MySqliResult|string
      */
-    public function aLog(string $title, string $content = '')
+    public function aLog(string $title, ?array $content = null)
     {
         return $this->adminLog(
             [
@@ -431,7 +435,7 @@ class auth extends AppBase
                 'nickname' => $this->user['nickname'],
                 'url'      => $_SERVER['REQUEST_URI'],
                 'title'    => $title,
-                'content'  => $content,
+                'content'  => is_array($content) ? json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : null,
             ]
         );
     }
@@ -607,6 +611,10 @@ class auth extends AppBase
      * 'pageNum'            => pageNum,
      * 'pageStart'          => pageStart,
      * 'navigationConfig'   => navigationConfig,
+     * 'menu'               => menu[],
+     * 'appName'            => appName,
+     * 'LoginUri'           => LoginUri,
+     * 'token'              => loginToken,
      * ```
      */
     public function Loader(?int $activeMenu = null, int|array $currentAuthNode =0)
@@ -677,6 +685,7 @@ class auth extends AppBase
             'menu'               => $this->menu,
             'appName'            => LiApp::$appName,
             'LoginUri'           => self::LoginUri,
+            'token'              => $liAdminToken,
         ];
     }
 
