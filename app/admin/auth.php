@@ -224,7 +224,7 @@ class auth extends AppBase
                 'status'    => (int)$user['status'],
                 'login_num' => (int)$user['login_num'],
                 'auth_ids'  => empty($user['auth_ids']) ? '0' : $user['auth_ids'],
-                'authPrivs' => empty($user['auth_priv']) ? [] : explode(',', $user['auth_priv']),
+                'authPrivs' => empty($user['auth_priv']) ? [] : $this->separator_permission($user['auth_priv']),
                 'admin'     => (int)$user['admin'],
                 'params'    => empty($user['params']) ? [] : json_decode($user['params'], true),
             ];
@@ -274,7 +274,7 @@ class auth extends AppBase
             'status'    => $user['status'],
             'login_num' => $user['login_num'],
             'auth_ids'  => empty($user['auth_ids']) ? '0' : $user['auth_ids'],
-            'authPrivs' => empty($user['auth_priv']) ? [] : explode(',', $user['auth_priv']),
+            'authPrivs' => empty($user['auth_priv']) ? [] : $this->separator_permission($user['auth_priv']),
             'admin'     => $user['admin'],
             'params'    => empty($user['params']) ? [] : json_decode($user['params'], true),
         ];
@@ -324,11 +324,11 @@ class auth extends AppBase
 
         //$_aIds = $this->db->table('admin_auth')->where("id IN ({$user['auth_ids']})")->fields("GROUP_CONCAT(rules)")->getValue();
         $res = $this->db->table('admin_auth')->where("id IN ({$user['auth_ids']})")->fields("rules")->select();
-        $_aIds = '';
+        $_aIds = '0';
         while ($r = $res->fetch_assoc()){
-            $_aIds .= $r['rules'];
+            $_aIds .= ','.$r['rules'];
         }
-        $authIds = empty($_aIds) ? [] : explode(',', $_aIds);
+        $authIds = $this->separator_permission($_aIds);
         $authIds = array_merge($authIds, $this->user['authPrivs']);
         //获取菜单权限
         if ($user['admin'] == 1) {
@@ -461,7 +461,7 @@ class auth extends AppBase
         $row['id'] = (int)$row['id'];
         $row['auths'] = empty($row['auth_ids']) ? [] : $this->getAdminAuths($row['auth_ids']);
         $row['params'] = empty($row['params']) ? [] : json_decode($row['params'], true);
-        $row['authPrivs'] = empty($row['auth_priv']) ? [] : explode(',', $row['auth_priv']);
+        $row['authPrivs'] = empty($row['auth_priv']) ? [] : $this->separator_permission($row['auth_priv']);
         return $row;
     }
 
@@ -485,7 +485,7 @@ class auth extends AppBase
         if (is_null($ids)) {
             $res = $this->db->table( 'admin_auth')->fields(['id', 'title'])->where(['status' => 1])->select();
         } else {
-            $res = $this->db->table( 'admin_auth')->fields(['id', 'title'])->where(['id' => ['IN', explode(',', $ids)]])->select();
+            $res = $this->db->table( 'admin_auth')->fields(['id', 'title'])->where(['id' => ['IN', $this->separator_permission($ids)]])->select();
         }
         $ret = [];
         while ($r = $res->fetch_assoc()) {
@@ -712,5 +712,17 @@ class auth extends AppBase
             }
         }
         return true;
+    }
+
+    /**
+     * 用逗号分隔的权限ID字符串拆解成数组
+     * @param string|null $str
+     * @return array
+     */
+    public function separator_permission(?string $str): array
+    {
+        $array = explode(',', $str);
+
+        return array_map('intval', $array);
     }
 }

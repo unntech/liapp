@@ -30,10 +30,9 @@ if(isset($_POST['savebtn'])){
     auth::instance()->aLog('角色分配权限：'.$id, $rulesCheck);
     $ruleName = auth::instance()->getAdminAuth($id);
 }
-
-$curAuthIds = explode(',', $ruleName['rules']);
+$curAuthIds = auth::instance()->separator_permission($ruleName['rules']);
 foreach ($ruleList as $k=>$v){
-    if(in_array($v['id'], $curAuthIds)){
+    if(in_array((int)$v['id'], $curAuthIds)){
         $ruleList[$k]['check'] = true;
     }else{
         $ruleList[$k]['check'] = false;

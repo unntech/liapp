@@ -94,7 +94,7 @@ while ($r = $res->fetch_assoc()){
     if(empty($r['auth_ids'])){
         $r['authRules'] = '';
     }else{
-        $_reu= LiApp::$db->table('admin_auth')->fields(['title'])->where(['id'=>['IN', explode(',', $r['auth_ids'])]])->select();
+        $_reu= LiApp::$db->table('admin_auth')->fields(['title'])->where(['id'=>['IN', auth::instance()->separator_permission($r['auth_ids'])]])->select();
         $rules = [];
         while($v = $_reu->fetch_assoc()){
             $rules[] = $v['title'];
