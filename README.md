@@ -38,7 +38,12 @@ composer create-project unntech/liapp yourApp
 将runtime目录设为可写权限
 docs/liteapp.sql 导入至数据库
 ~~~
-
+~~~
+项目建议配置 redis 支持，性能得以提升
+redis配置参数：config/redis.php
+配置好redis后，把session.php  'save' 改 'redis'
+app\admin\auth.php : const menuNodeCache = true;  启用权限缓存
+~~~
 如果需要更新框架使用
 ~~~
 composer update unntech/liphp

@@ -7,6 +7,7 @@ use LiPhp\LiComm;
 use LiPhp\Config;
 use LiPhp\Env;
 use LiPhp\Model;
+use LiPhp\SnowFlake;
 use LiPhp\Template;
 use App\framework\extend\Db;
 use App\framework\extend\Redis;
@@ -14,7 +15,7 @@ use App\framework\extend\Logger;
 
 class LiApp
 {
-    const VERSION = '2.0.6';
+    const VERSION = '2.0.7';
     /**
      * @var extend\MySQLi
      */
@@ -37,8 +38,9 @@ class LiApp
     {
         Config::load(['db']);
         self::$logger->addOutputTargetFile('app-'.date("Y-m").'.log');
-        LiApp::set_db();
+        self::set_db();
         Model::setDb(self::$db);
+        //self::set_redis();
     }
 
     public static function initialize(): void
@@ -195,4 +197,30 @@ class LiApp
         $ret .= '"><a class="page-link" href="?'.$pageKey.'='.$nextPage.$a.'">Next</a></li><li class="page-item"><span class="page-link">共'.$count.'条记录</span></li></ul></nav>';
         return $ret;
     }
+
+    /**
+     * 产生随机安全键名保存数值，需要Redis支持
+     * @param mixed $value
+     * @param int $expire
+     * @param string $prefix
+     * @return string
+     */
+    public static function setSecurityToken(mixed $value, int $expire = 7200, string $prefix = ''): string
+    {
+        $key = uniqid($prefix) . SnowFlake::generateParticle();
+        Redis::set("token:" . $key, serialize($value), $expire);
+        return $key;
+    }
+
+    /**
+     * 用安全键名获取数值，需要Redis支持
+     * @param string $key
+     * @return mixed
+     */
+    public static function getSecurityToken(string $key): mixed
+    {
+        $value = Redis::get("token:" . $key);
+        return $value === false ? null : unserialize($value);
+    }
+
 }

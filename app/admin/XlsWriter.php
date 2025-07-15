@@ -2,6 +2,8 @@
 
 namespace App\admin;
 
+use Vtiful\Kernel\Excel;
+
 class XlsWriter
 {
     public $xlsObj;
@@ -15,7 +17,7 @@ class XlsWriter
             //'path' => realpath(sys_get_temp_dir()),
             'path'  => $path,
         ];
-        $this->xlsObj = new \Vtiful\Kernel\Excel($xlsx_config);
+        $this->xlsObj = new Excel($xlsx_config);
     }
 
     /**
@@ -130,10 +132,10 @@ class XlsWriter
 
     /**
      * 输出至文件
-     * @param $path
+     * @param string|null $path
      * @return false|string 成功返回文件名，失败返回false;
      */
-    public function output($path = null)
+    public function output(?string $path = null)
     {
         $xlsx_filePath = $this->fileObj->output();
         ob_clean();
@@ -157,15 +159,14 @@ class XlsWriter
 
     /**
      * 直接输入至浏览器下载
-     * @param $data
+     * @param array $data
      * @return void
      */
-    public function export($data = null)
+    public function export(array $data = [])
     {
         if(!empty($data)){
             if(!is_array($data)){
-                echo 'No Data!';
-                exit(0);
+                throw new \InvalidArgumentException('参数非数组！', 500);
             }
             $this->data($data);
         }
@@ -183,8 +184,7 @@ class XlsWriter
         flush();
 
         if (copy($xlsx_filePath, 'php://output') === false) {
-            // Throw exception
-            echo 'Export file false!';
+            throw new \RuntimeException('Export file false!', 404);
         }
 
         // Delete temporary file
@@ -194,10 +194,11 @@ class XlsWriter
 
     /**
      * 全量读取Excel数据
-     * @param $file
+     * @param string $file
+     * @param string|null $sheet
      * @return array|false 失败返回false，成功返回数据集
      */
-    public function reader($file, $sheet = null)
+    public function reader(string $file, ?string $sheet = null)
     {
         if(!file_exists($file)){
             return false;
@@ -210,11 +211,11 @@ class XlsWriter
 
     /**
      * 打开Excel数据表句柄
-     * @param $file
-     * @param $sheet
-     * @return false|\Vtiful\Kernel\Excel
+     * @param string $file
+     * @param string|null $sheet
+     * @return false|Excel
      */
-    public function openFile($file, $sheet= null)
+    public function openFile(string $file, ?string $sheet= null)
     {
         if(!file_exists($file)){
             return false;
@@ -257,7 +258,7 @@ class XlsWriter
      */
     public function excelToUnixTime($excelDate): int
     {
-        if(is_float($excelDate)){
+        if(is_numeric($excelDate)){
             $time = intval(($excelDate - 25569)*86400 - 28800);
         }else{
             $time = (int)strtotime($excelDate);
