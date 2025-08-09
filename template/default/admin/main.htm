@@ -2,7 +2,10 @@
 {template 'admin/navigation'}
 <script>
     $(document).ready(function (){
-
+        $(".main-navigation-item").click(function () {
+            let href = $(this)[0].dataset.href;
+            self.location.href= href;
+        })
     });
 </script>
 <div class="admin-content-wrapper">
@@ -13,14 +16,30 @@
     </div>
     <div class="admin-content-body">
     <div class="container-fluid">
-        控制台<BR>
-        {if auth_node_auth(10)}
-        <BR>
-        数据报表，有对应权限的才显示
-        {/if}
-        <BR><BR>
-        <a href="example/index.php">一些样式例子：/admin/example/index.php</a>
+        <div class="d-flex d-flex-gap-3 flex-wrap">
+            {loop $Loader[menu] $k $v}
+            {if isset($v['sub'])}
+            {loop $v['sub'] $subk $subv}
+            <div class="main-navigation-item" data-href="{$subv[href]}">
+                <div class="item-icon"><i class="{if empty($subv['icon'])}bi bi-list{else}{$subv[icon]}{/if}" title="{$subv[title]}"></i></div>
+                <div class="item-title">{$subv[title]}</div>
+            </div>
+            {/loop}
+            {else}
+            <div class="main-navigation-item" data-href="{$v[href]}">
+                <div class="item-icon"><i class="{if empty($v['icon'])}bi bi-list-ul{else}{$v[icon]}{/if}" title="{$v[title]}"></i></div>
+                <div class="item-title">{$v[title]}</div>
+            </div>
+            {/if}
+            {/loop}
+        </div>
     </div>
+    </div>
+    <div class="admin-content-box-mp mt-3">
+        {if auth_node_auth(10)}
+        数据报表<BR>
+        <a href="example/index.php">一些样式例子：/admin/example/index.php</a>
+        {/if}
     </div>
 </div>
 
