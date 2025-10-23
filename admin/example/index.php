@@ -6,7 +6,11 @@ use App\admin\auth;
 
 $Loader = auth::instance()->Loader(0);
 
-//多个分页条处理方式
+//单个分页条处理方式，可直接使用以下变量
+$pageTotal = 123;
+$Loader['pageStart']; $Loader['pageNum']; $Loader['page'];
+
+//多个分页条处理方式，需自计算计算 pageStart 值
 $pageTotal1 = 100;
 $page1 = isset($_GET['page1']) ? intval($_GET['page1']) : 1;
 if ($page1 < 1) {  $page1 = 1; }
