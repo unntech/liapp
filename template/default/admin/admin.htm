@@ -226,8 +226,8 @@
                     <td>{$v[nickname]}</td>
                     <td>{$v[login_num]}</td>
                     <td>{$v['statusName']}</td>
-                    <td>{$v[authRules]}</td>
-                    <td>{$v[auth_priv]}</td>
+                    <td class="listcol-wrap-w350">{$v[authRules]}</td>
+                    <td class="listcol-wrap-w350">{$v[auth_priv]}</td>
                     <td>{$v[adminTag]}</td>
                     <td>{if $v[authenticator]!=''} {if auth_node_auth(18)}
                         <button type="button" data-toggle="modal" data-target="#deleteAdminUser" title="解除动态码绑定" data-node="18" data-rowid="{$v[id]}" data-action ="SECURE" class="btn btn-danger btn-ssm">解除绑定</button>

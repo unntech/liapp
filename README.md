@@ -42,7 +42,8 @@ docs/liteapp.sql 导入至数据库
 项目建议配置 redis 支持，性能得以提升
 redis配置参数：config/redis.php
 配置好redis后，把session.php  'save' 改 'redis'
-app\admin\auth.php : const menuNodeCache = true;  启用权限缓存
+app/admin/auth.php : const menuNodeCache = true;  启用权限缓存
+app/framework/LiApp.php : Loader() 方法里的 self::set_redis(); 按需要可以启用自动全局连接Redis
 ~~~
 如果需要更新框架使用
 ~~~

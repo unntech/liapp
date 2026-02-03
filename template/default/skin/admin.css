@@ -249,6 +249,11 @@ body{
     max-width: 300px;
 }
 
+.listcol-wrap-w350 {
+    max-width: 350px;
+    word-break: break-all;
+}
+
 .admin-switch-wrap input[type=checkbox]{
     height: 0px;
     width: 0px;

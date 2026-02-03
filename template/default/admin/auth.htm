@@ -147,7 +147,7 @@
                             <label class="custom-control-label" for="statusSwitch-{$k}"></label>
                         </div>
                     </td>
-                    <td>{$v[rules]}</td>
+                    <td class="listcol-wrap-w350">{$v[rules]}</td>
                     <td>
                         {if auth_node_auth(13)}<button type="button" class="btn btn-primary btn-ssm" data-toggle="modal" data-target="#editAdminUser" title="编辑角色" data-node="13" data-action ="EDIT" data-rowid="{$v[id]}">编辑</button>{/if}
                         {if auth_node_auth(15)}<a class="btn btn-success btn-ssm" href="{auth_node_href(15)}?id={$v[id]}">分配权限</a>{/if}
