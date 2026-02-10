@@ -211,7 +211,7 @@ function adminCommFunc(access_token, login_token = '') {
 
     this.awaitApiPost = function (url, d) {
         let p = {};
-        p['head'] = {"unique_id":this.randString(24),"apiToken":this.token,"token":this.loginToken};
+        p['head'] = {"unique_id":this.randString(24),"access_token":this.token,"token":this.loginToken};
         p['body'] = d;
         p['signType'] = "NONE";
         return $.ajax({

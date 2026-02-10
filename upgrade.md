@@ -29,7 +29,7 @@
 * 原来的`apiToken`更换为`access_token`；统一变量名规范
 * `Response` 统一改用 `App\framework\Response`，其它类弃用
 * 移除 `admin/auth.inc.php`，鉴权载入改用： `$Loader = auth::instance()->Loader()`
-* 原先的一些变量如 `pageStart`, `isAjax`, `postData` 等全局变量，改放入 `$Loader` 里
+* 原先的一些变量如 `pageStart`, `isAjax`, `postData` 等全局变量，改放入 `$Loader` 数组里
 
 ### 其它自行编写的文件及代码
 * 更据实现情况修改

@@ -1,6 +1,8 @@
 CHANGELOG
 =========
 ### v2.0.8 `2026-02-03`
+* admin/header.htm `adminComm = new adminCommFunc('{$access_token}', '{$Loader[token]}');`
+* fix bugs
 
 ### v2.0.7 `2025-07-13`
 * fix bugs

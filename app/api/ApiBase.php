@@ -218,7 +218,7 @@ class ApiBase extends AppBase
         }
     }
 
-    public function access_token_generate(?string $appid): array
+    public function access_token_generate(?string $appid = ''): array
     {
         if(empty($appid)){
             return ['suc'=>false, 'msg'=>'Appid 不能为空'];

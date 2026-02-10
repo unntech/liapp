@@ -18,6 +18,7 @@ class auth extends AppBase
     const NonceId = '';           //随机盐值，增加安全性
     const LoginUri = '/admin/index.php';
     const LoginTokenExpire = 86400;
+    const AccessTokenExpire = 7200;
     public bool $loginSuccess = false;
     public static int $curUserId = 0;
     protected array $user = ['id' => 0];
@@ -190,7 +191,7 @@ class auth extends AppBase
 
             return [
                 'login'        => true,
-                'access_token' => $this->getToken(['sub' => (int)$userid], 7200),
+                'access_token' => $this->getToken(['sub' => (int)$userid], self::AccessTokenExpire),
                 'id'           => (int)$user['id'],
                 'username'     => $user['username'],
                 'nickname'     => $user['nickname'],
@@ -651,7 +652,7 @@ class auth extends AppBase
         }
         $pageStart = ($page - 1) * $pageNum;
         $jwt = ['sub' => $this->curUserId(), 'node' => $activeMenu];
-        $access_token = $this->getToken($jwt, 18000);
+        $access_token = $this->getToken($jwt, self::AccessTokenExpire);
 
         $isAjax = false;
         $postStr = file_get_contents("php://input");

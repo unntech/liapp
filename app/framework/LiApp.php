@@ -12,6 +12,7 @@ use LiPhp\Template;
 use App\framework\extend\Db;
 use App\framework\extend\Redis;
 use App\framework\extend\Logger;
+use LiPhp\LiCrypt;
 
 class LiApp
 {
@@ -221,6 +222,31 @@ class LiApp
     {
         $value = Redis::get("token:" . $key);
         return $value === false ? null : unserialize($value);
+    }
+
+    /**
+     * 使用鉴权方式请求接口，生成 access_token 方法示例
+     * @param string|int $appid
+     * @return array
+     */
+    public static function access_token_generate(string|int $appid = ''): array
+    {
+        if(empty($appid)){
+            $appid = uniqid();
+        }
+        $exp = self::$DT_TIME + 7200;
+        $jwt = ['sub'=>$appid, 'exp'=>$exp];
+        $token = LiCrypt::instance(DT_KEY)->getToken($jwt, 7200);
+        $secret = LiComm::createNonceStr(32);
+        self::set_redis();
+        $_str = serialize(['token'=>$token, 'secret'=>$secret]);
+        Redis::set("ACCESS_".$appid, $_str, 7200);
+        return [
+            'suc'          => true,
+            'access_token' => $token,
+            'expires_in'   => $exp,
+            //'secret'       => $secret,
+        ];
     }
 
 }

@@ -55,8 +55,8 @@ class Admin extends Controller
         $vars['page'] = $this->page;
         $vars['pageStart'] = $this->pageStart;
         $vars['pageNum'] = $this->pageNum;
-        $jwt = ['sub' => $this->curUserId, 'node' => $this->activeMenu, 'exp' => time() + 18000];
-        $vars['access_token'] = $this->getToken($jwt);
+        $jwt = ['sub' => $this->curUserId, 'node' => $this->activeMenu];
+        $vars['access_token'] = $this->getToken($jwt, auth::AccessTokenExpire);
         $vars['appName'] = $this->appName;
         $vars['Loader'] = [
             'activeMenu'         => $this->activeMenu,
@@ -67,6 +67,7 @@ class Admin extends Controller
             'menu'               => $this->auth->getMenu(),
             'appName'            => LiApp::$appName,
             'LoginUri'           => auth::LoginUri,
+            'token'              => get_cookie('LiAdmin' . auth::NonceId, ''),
         ];
         parent::view($template, $vars, $CSS);
     }
@@ -161,8 +162,8 @@ class Admin extends Controller
         if (LiComm::is_mobile()) {
             $vars['navigationConfig'] = 'top';
         }
-        $jwt = ['sub' => $this->curUserId, 'node' => $this->activeMenu, 'exp' => time() + 18000];
-        $vars['apiToken'] = $this->getToken($jwt);
+        $jwt = ['sub' => $this->curUserId, 'node' => $this->activeMenu];
+        $vars['access_token'] = $this->getToken($jwt, auth::AccessTokenExpire);
         $vars['presentation'] = $this->auth->presentation($this->activeMenu);
         $vars['navigatorSiderFlag'] = $_COOKIE['navigatorSiderFlag'] ?? 0;
         $vars['auth'] = $this->auth;

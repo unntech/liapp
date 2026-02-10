@@ -23,7 +23,7 @@
     <script src="{DT_STATIC}/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="{DT_STATIC}/admin/js/admin-comm.js?v={APP_VERSION}"></script>
     <script>
-        adminComm = new adminCommFunc('{$access_token}');
+        adminComm = new adminCommFunc('{$access_token}', '{$Loader[token]}');
         var checkSubmitFlag = 0, checkRepeatFlag = 0;
         {php if(!isset($Loader['navigatorSiderFlag'])){$Loader['navigatorSiderFlag'] = 0;} }
         var navigatorSiderFlag ={$Loader[navigatorSiderFlag]};
