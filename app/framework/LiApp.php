@@ -208,8 +208,8 @@ class LiApp
      */
     public static function setSecurityToken(mixed $value, int $expire = 7200, string $prefix = ''): string
     {
-        $key = uniqid($prefix) . SnowFlake::generateParticle();
-        Redis::set("token:" . $key, serialize($value), $expire);
+        $key = uniqid($prefix) . $_SERVER['UNIQUE_ID'] ?? SnowFlake::generateParticle();
+        Redis::set("SecurityToken:" . $key, serialize($value), $expire);
         return $key;
     }
 
@@ -220,7 +220,7 @@ class LiApp
      */
     public static function getSecurityToken(string $key): mixed
     {
-        $value = Redis::get("token:" . $key);
+        $value = Redis::get("SecurityToken:" . $key);
         return $value === false ? null : unserialize($value);
     }
 
