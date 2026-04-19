@@ -115,7 +115,7 @@ function adminConfirmOptStyle(){
 }
 
 function adminCommFunc(access_token, login_token = '') {
-    this.token = access_token === undefined ? '' : access_token;
+    this.accessToken = access_token === undefined ? '' : access_token;
     this.loginToken = login_token === undefined ? '' : login_token;
 
     this.setLoginToken = function (login_token){
@@ -127,7 +127,7 @@ function adminCommFunc(access_token, login_token = '') {
     }
 
     this.post = function (url, d, successFunc) {
-        d['access_token'] = this.token;
+        d['access_token'] = this.accessToken;
         d['token'] = this.loginToken;
         $.ajax({
             url: url,
@@ -143,7 +143,7 @@ function adminCommFunc(access_token, login_token = '') {
 
     this.formPost = function (url, formData = {}, fileData =[], successFunc) {
         let postData = new FormData();
-        postData.append("access_token", this.token);
+        postData.append("access_token", this.accessToken);
         postData.append("token", this.loginToken);
 
         $.each(formData, function (key, value){
@@ -181,7 +181,7 @@ function adminCommFunc(access_token, login_token = '') {
     }
 
     this.awaitPost = function (url, d) {
-        d['access_token'] = this.token;
+        d['access_token'] = this.accessToken;
         d['token'] = this.loginToken;
         return $.ajax({
             url: url,
@@ -194,7 +194,7 @@ function adminCommFunc(access_token, login_token = '') {
 
     this.apiPost = function (url, d, successFunc) {
         let p = {};
-        p['head'] = {"unique_id":this.randString(24),"access_token":this.token,"token":this.loginToken};
+        p['head'] = {"unique_id":this.randString(24),"access_token":this.accessToken,"token":this.loginToken};
         p['body'] = d;
         p['signType'] = "NONE";
         $.ajax({
@@ -211,7 +211,7 @@ function adminCommFunc(access_token, login_token = '') {
 
     this.awaitApiPost = function (url, d) {
         let p = {};
-        p['head'] = {"unique_id":this.randString(24),"access_token":this.token,"token":this.loginToken};
+        p['head'] = {"unique_id":this.randString(24),"access_token":this.accessToken,"token":this.loginToken};
         p['body'] = d;
         p['signType'] = "NONE";
         return $.ajax({
