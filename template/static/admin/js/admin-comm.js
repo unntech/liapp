@@ -118,6 +118,14 @@ function adminCommFunc(access_token, login_token = '') {
     this.accessToken = access_token === undefined ? '' : access_token;
     this.loginToken = login_token === undefined ? '' : login_token;
 
+    this.setAccessToken = function (access_token){
+        this.accessToken = access_token;
+    }
+
+    this.getAccessToken = function (){
+        return this.accessToken;
+    }
+
     this.setLoginToken = function (login_token){
         this.loginToken = login_token;
     }
