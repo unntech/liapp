@@ -222,7 +222,14 @@ function rightSidebarBox(){
     $("#admin-right-sidebar").fadeToggle();
 }
 
-function navigatorSiderToggle(){
+/**
+ * 边栏菜单缩放
+ * @param flag 0默认值自动判断变换 1变小，2变大
+ */
+function navigatorSiderToggle(flag = 0){
+    if(flag > 0){
+        navigatorSiderFlag = flag - 1;
+    }
     if(navigatorSiderFlag == 0){
         $("#admin-main-sidebar").addClass('main-sidebar-sm');
         $(".admin-content-wrapper").css('padding-left', '68px');
