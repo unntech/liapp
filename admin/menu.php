@@ -18,6 +18,14 @@ if($Loader['isAjax']){  //ajax 提交
         }else{
             Response::error(1000, '查无记录！');
         }
+    }elseif($postData['node'] == 17 && $postData['action'] == 'SetStatus') {
+        $data = ['status'=>$postData['status']];
+        $res = LiApp::$db->table('admin_node')->where(['id' => $postData['rowid']])->fields($data)->update();
+        if ($res) {
+            Response::success(['id' => $postData['rowid']]);
+        } else {
+            Response::error(1001, '设置菜单状态失败！');
+        }
     }elseif($postData['node'] == 17 && $postData['action'] == 'EDIT') {
         auth::instance()->aLog('编辑节点：'.$postData['rowid'], $postData);
         $data = ['pid'=>$postData['pid'], 'node' => $postData['nodename'], 'title' => $postData['title'], 'status'=>$postData['status'], 'icon'=>$postData['icon'], 'sort'=>$postData['sort']];
@@ -25,7 +33,7 @@ if($Loader['isAjax']){  //ajax 提交
         if ($res) {
             Response::success(['id' => $postData['rowid']]);
         } else {
-            Response::error(1001, '更新节点资料失败！');
+            Response::error(1001, '更新菜单资料失败！');
         }
     }else{
         Response::error(9, '非法无效请求！');

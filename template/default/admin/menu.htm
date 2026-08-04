@@ -87,6 +87,27 @@
             $("#colNodeIcon-i").html('<i class="'+ $("#colNodeIcon").val() +'"></i>');
         });
 
+        $(".switch-status").change(function () {
+
+            let ck = $(this).prop("checked") ? 1 : 0;
+            let d = {
+                "node": 17,
+                'rowid': this.dataset.rowid,
+                'status': ck,
+                'action': 'SetStatus',
+            }
+            adminComm.post('menu.php', d, function (ret, status) {
+                if (status == 'success') {
+                    //console.log(ret);
+                    if(ret.head.errcode == 0) {
+                        toastr.success("设置状态成功！");
+                    }else{
+                        toastr.warning(ret.head.errcode + ": "+ret.head.msg);
+                    }
+                }
+            });
+        });
+
         function checkFormFields(){
             let formCheck = true;
             if($("#colNodeTitle").val().length<2){
@@ -131,7 +152,7 @@
                     <td align="left">{$v[node]}</td>
                     <td align="left">{$v[title]}</td>
                     <td><div class='admin-switch-wrap'>
-                        <input type='checkbox' id= 'switch-{$k}' {if $v[status] == 1} checked {/if}>
+                        <input type='checkbox' class="switch-status" data-rowid="{$v[id]}" id= 'switch-{$k}' {if $v[status] == 1} checked {/if}>
                         <label for='switch-{$k}'></label>
                     </div></td>
                     <td>{if !empty($v['icon'])}<i class="{$v[icon]}" title="{$v[icon]}"></i>{/if}</td>

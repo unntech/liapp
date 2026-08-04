@@ -1,5 +1,8 @@
 CHANGELOG
 =========
+## v2.0.9 `2026-08-04`
+* 菜单管理、权限节点、角色组管理，列表上可以直接开关状态
+
 ### v2.0.8 `2026-02-03`
 * admin/header.htm `adminComm = new adminCommFunc('{$access_token}', '{$Loader[token]}');`
 * fix bugs

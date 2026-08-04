@@ -17,6 +17,14 @@ if($Loader['isAjax']){  //ajax 提交
         }else{
             Response::error(1000, '查无记录！');
         }
+    }elseif($postData['node'] == 13 && $postData['action'] == 'SetStatus') {
+        $data = ['status' => $postData['status']];
+        $res = LiApp::$db->table('admin_auth')->where(['id' => $postData['rowid']])->fields($data)->update();
+        if ($res) {
+            Response::success(['id' => $postData['rowid']]);
+        } else {
+            Response::error(1001, '设置角色状态失败！');
+        }
     }elseif($postData['node'] == 13 && $postData['action'] == 'EDIT') {
         auth::instance()->aLog('编辑角色：'.$postData['rowid'], $postData);
         $data = ['title'=>$postData['username'], 'remark' => $postData['nickname'], 'status' => $postData['userstatus']];

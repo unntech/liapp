@@ -36,16 +36,16 @@ class wangeditor extends ApiBase
             if($image->width() > $this->maxWidth){
                 try {
                     $image->thumb(640, $image->height())->save($_FILES['upload']['tmp_name']);
-                }catch (Throwable $e){
+                }catch (\Throwable $e){
                     if(DT_DEBUG) echo $e->getMessage();
-                    $this->error(1001, '上传图片处理失败');
+                    $this->_error(1001, '上传图片处理失败');
                 }
             }
             $image->free();
             $s3 = new MinioS3();
             $fn = $s3->uploadFile($_FILES['upload']['tmp_name'], $subject, $ext, $mime);
             if($fn){
-                $this->success([
+                $this->_success([
                     'url'   =>  $fn['ObjectURL'],
                     'alt'   =>  $_FILES['upload']['name'],
                 ]);
@@ -56,7 +56,7 @@ class wangeditor extends ApiBase
                 'alt'   =>  $_FILES['upload']['name'],
             ]);
         }
-        $this->error(1001, '上传图片失败！');
+        $this->_error(1001, '上传图片失败！');
     }
 
     public function uploadVideo(): void
@@ -70,7 +70,7 @@ class wangeditor extends ApiBase
         $ext = substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.') + 1);
         $fn = $s3->uploadFile($_FILES['upload']['tmp_name'], $subject, $ext, $_FILES['upload']['type']);
         if($fn){
-            $this->success([
+            $this->_success([
                 'url'   =>  $fn['ObjectURL'],
             ]);
         }
@@ -79,7 +79,7 @@ class wangeditor extends ApiBase
             'url'   => 'https://apis.zhisg.com/lite/lite-logo.png',
         ]);
 
-        $this->error(1001, '上传视频失败！');
+        $this->_error(1001, '上传视频失败！');
     }
 
     public function _success(array $data = [], int $errcode = 0, string $msg = 'success')

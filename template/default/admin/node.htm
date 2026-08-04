@@ -87,6 +87,27 @@
             $("#colNodeIcon-i").html('<i class="'+ $("#colNodeIcon").val() +'"></i>');
         });
 
+        $(".switch-status").change(function () {
+
+            let ck = $(this).prop("checked") ? 1 : 0;
+            let d = {
+                "node": 16,
+                'rowid': this.dataset.rowid,
+                'status': ck,
+                'action': 'SetStatus',
+            }
+            adminComm.post('node.php', d, function (ret, status) {
+                if (status == 'success') {
+                    //console.log(ret);
+                    if(ret.head.errcode == 0) {
+                        toastr.success("设置状态成功！");
+                    }else{
+                        toastr.warning(ret.head.errcode + ": "+ret.head.msg);
+                    }
+                }
+            });
+        });
+
         function checkFormFields(){
             let formCheck = true;
             if($("#colNodeTitle").val().length<2){
@@ -134,7 +155,7 @@
                     <td align="left">{$v[title]}</td>
                     <td>
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="statusSwitch-{$k}" {if $v[status] == 1} checked {/if}>
+                            <input type="checkbox" class="custom-control-input switch-status" data-rowid="{$v[id]}" id="statusSwitch-{$k}" {if $v[status] == 1} checked {/if}>
                             <label class="custom-control-label" for="statusSwitch-{$k}"></label>
                         </div>
                     </td>
